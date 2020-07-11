@@ -1,0 +1,38 @@
+providers:
+    - name: alert2
+      type: static
+      event_type: alert
+      ipranges:
+        src: 10.0.0.0/16
+        dst: 10.0.0.0/29
+      ports:
+        src: [345, 323]
+        dst: [80]
+      proto: 6
+      static: '{"action": "allowed", "gid": 1, "signature_id": 2001999, "rev": 9, "signature": "ET MALWARE BTGrab.com Spyware Downloading Ads", "category": "A Network Trojan was detected", "severity": 1}'
+      weight: 100
+    - name: tengotest2
+      type: tengo
+      event_type: foo
+      ipranges:
+        src: 10.0.0.0/27
+        dst: 10.0.0.0/27
+      ports:
+        src: [345, 323]
+        dst: [80]
+      proto: 6
+      tengo: >
+        encoded := "{\"foo\": 42}"
+      weight: 2
+    - name: alert1
+      type: template
+      event_type: dns
+      ipranges:
+        src: 10.0.0.0/24
+        dst: 10.0.0.0/24
+      ports:
+        src: [666, 6667]
+        dst: [443]
+      proto: 17
+      template: '{"yep": "{{.Srcip}}"}'
+      weight: 100
