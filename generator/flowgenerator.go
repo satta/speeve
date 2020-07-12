@@ -175,6 +175,8 @@ func (fg *FlowGenerator) EmitFlow(out chan<- []byte) {
 	fg.Buffer.WriteString(flowStart)
 	fg.Buffer.WriteString(fmt.Sprintf(`, "flow": %s}`, flowJSON))
 	fg.Buffer.WriteByte('\n')
+	// We intentionally use Buffer.String() here to ensure we pass a copy
+	// of the buffer content
 	out <- []byte(fg.Buffer.String())
 	fg.Buffer.Reset()
 
@@ -192,6 +194,8 @@ func (fg *FlowGenerator) EmitFlow(out chan<- []byte) {
 	fg.Buffer.WriteString(genericStart)
 	fg.Buffer.WriteString(fmt.Sprintf(`, "%s": %s}`, selectedProvider.EventType, providerJSON))
 	fg.Buffer.WriteByte('\n')
+	// We intentionally use Buffer.String() here to ensure we pass a copy
+	// of the buffer content
 	out <- []byte(fg.Buffer.String())
 	fg.Buffer.Reset()
 }

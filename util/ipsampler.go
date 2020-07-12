@@ -2,7 +2,6 @@ package util
 
 import (
 	"encoding/binary"
-	"math/big"
 	"math/rand"
 	"net"
 )
@@ -29,18 +28,6 @@ func MakeIPSampler(rng string) (*IPSampler, error) {
 		is.baseIP = binary.BigEndian.Uint32(ip)
 	}
 	return is, nil
-}
-
-func ipv6ToInt(IPv6Addr net.IP) *big.Int {
-	IPv6Int := big.NewInt(0)
-	IPv6Int.SetBytes(IPv6Addr)
-	return IPv6Int
-}
-
-func intToIpv6(intipv6 *big.Int) net.IP {
-	ip := intipv6.Bytes()
-	var a net.IP = ip
-	return a
 }
 
 func toIPv4(val uint32) net.IP {
