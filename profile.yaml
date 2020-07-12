@@ -24,15 +24,15 @@ providers:
       tengo: >
         encoded := "{\"foo\": 42}"
       weight: 2
-    - name: alert1
+    - name: dns
       type: template
       event_type: dns
       ipranges:
         src: 10.0.0.0/24
         dst: 10.0.0.0/24
       ports:
-        src: [666, 6667]
-        dst: [443]
+        src: []
+        dst: [53]
       proto: 17
-      template: '{"yep": "{{.Srcip}}"}'
+      template: '{"version":2,"type":"answer","id":574,"flags":"8180","qr":true,"rd":true,"ra":true,"rrname":"github.com","rrtype":"AAAA","rcode":"NOERROR","authorities":[{"rrname":"github.com","rrtype":"SOA","ttl":5}]}'
       weight: 100

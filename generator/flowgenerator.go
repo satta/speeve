@@ -7,10 +7,12 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/satta/gommunityid"
 	"github.com/satta/speeve/flow"
 	"github.com/satta/speeve/providers"
 	"github.com/satta/speeve/util"
+
+	"github.com/satta/gommunityid"
+	log "github.com/sirupsen/logrus"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -87,10 +89,10 @@ func MakeFlowGenerator(configFile string) (*FlowGenerator, error) {
 			return nil, err
 		}
 		if len(pc.Ports.Src) == 0 {
-			return nil, fmt.Errorf("%s: src ports undefined", pc.Name)
+			log.Warnf("%s: src ports undefined, will use random high ports", pc.Name)
 		}
 		if len(pc.Ports.Dst) == 0 {
-			return nil, fmt.Errorf("%s: dst ports undefined", pc.Name)
+			log.Warnf("%s: dst ports undefined, will use random high ports", pc.Name)
 		}
 		if pc.Weight == 0 {
 			return nil, fmt.Errorf("%s: weight cannot be undefined or 0", pc.Name)
@@ -119,11 +121,23 @@ func MakeFlowGenerator(configFile string) (*FlowGenerator, error) {
 const suricataTimestampFormat = "2006-01-02T15:04:05.999999-0700"
 
 func (fg *FlowGenerator) makeFlowForProvider(p ConfiguredProvider) *flow.Flow {
+	srcPort := uint16(0)
+	dstPort := uint16(0)
+	if len(p.SrcPorts) == 0 {
+		srcPort = uint16(rand.Intn(63000) + 1024)
+	} else {
+		srcPort = p.SrcPorts[rand.Intn(len(p.SrcPorts))]
+	}
+	if len(p.DstPorts) == 0 {
+		dstPort = uint16(rand.Intn(63000) + 1024)
+	} else {
+		dstPort = p.DstPorts[rand.Intn(len(p.DstPorts))]
+	}
 	f := &flow.Flow{
 		SrcIP:     p.SrcIPs.GetIP(),
 		DstIP:     p.DstIPs.GetIP(),
-		SrcPort:   p.SrcPorts[rand.Intn(len(p.SrcPorts))],
-		DstPort:   p.DstPorts[rand.Intn(len(p.DstPorts))],
+		SrcPort:   srcPort,
+		DstPort:   dstPort,
 		Proto:     p.Proto,
 		Timestamp: time.Now().Format(suricataTimestampFormat),
 	}
