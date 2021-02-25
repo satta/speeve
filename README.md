@@ -6,6 +6,9 @@ speeve is a fast, probabilistic [EVE-JSON](https://suricata.readthedocs.io/en/la
 
 ## Building
 
+Build dependency:
+* `libpcap-dev`
+
 Like any good Go program:
 
 ```
