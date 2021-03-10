@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/d5/tengo"
+	"github.com/d5/tengo/stdlib"
 	"github.com/satta/speeve/flow"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -37,6 +38,7 @@ func MakeTengoProvider(configFile string, name string) (*TengoProvider, error) {
 	for _, p := range t.Providers {
 		if p.Name == name {
 			s := tengo.NewScript([]byte(p.Tengo))
+			s.SetImports(stdlib.GetModuleMap(stdlib.AllModuleNames()...))
 			tp.script = s
 			c, err := s.Compile()
 			if err != nil {
