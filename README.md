@@ -52,7 +52,7 @@ as well as rate (`-s`, events per second).
 
 Example:
 ```
-$ speeve spew -p profile.yaml | head -n
+$ speeve spew -p profile.yaml | head -n 2
 WARN[0000] random_dns: src ports undefined, will use random high ports 
 WARN[0000] random_dns: src ports undefined, will use random high ports 
 WARN[0000] dns: src ports undefined, will use random high ports 
