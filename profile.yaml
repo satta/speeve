@@ -1,29 +1,43 @@
 providers:
-    - name: alert2
+    - name: alert
       type: static
       event_type: alert
       ipranges:
         src: 10.0.0.0/16
         dst: 10.0.0.0/29
       ports:
-        src: [345, 323]
+        src: [3452, 32333]
         dst: [80]
       proto: 6
       static: '{"action": "allowed", "gid": 1, "signature_id": 2001999, "rev": 9, "signature": "ET MALWARE BTGrab.com Spyware Downloading Ads", "category": "A Network Trojan was detected", "severity": 1}'
       weight: 100
-    - name: tengotest2
+    - name: random_dns
       type: tengo
-      event_type: foo
+      event_type: dns
       ipranges:
-        src: 10.0.0.0/27
-        dst: 10.0.0.0/27
+        src: 10.0.0.0/8
+        dst: 10.0.0.0/8
       ports:
-        src: [345, 323]
-        dst: [80]
-      proto: 6
+        src: []
+        dst: [53]
+      proto: 17
       tengo: >
-        encoded := "{\"foo\": 42}"
-      weight: 2
+        rnd := import("rand");
+        fmt := import("fmt");
+        text := import("text");
+        chars := "abcdefghijklmnopqrstuvw";
+
+        a := [];
+        for i:=0; i<10; i++ {
+           a = append(a, chars[rnd.intn(23)]);
+        }
+
+        dom := text.join(append(a, ".com"), "");
+        ip := fmt.sprintf("%d.%d.%d.%d", rnd.intn(250), rnd.intn(250), rnd.intn(250), rnd.intn(250));
+        tmpl := `{"version":2,"type":"answer","id":%d,"flags":"8180","qr":true,"rd":true,"ra":true,"rrname":"%s","rrtype":"A","rcode":"NOERROR","answers":[{"rrname":"%s","rrtype":"A","ttl":299,"rdata":"%s"}],"grouped":{"A":["%s"]}}`;
+  
+        encoded := fmt.sprintf(tmpl, rnd.intn(40000), dom, dom, ip, ip);
+      weight: 50
     - name: dns
       type: template
       event_type: dns
