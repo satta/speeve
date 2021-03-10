@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/d5/tengo v1.24.8
+	github.com/d5/tengo/v2 v2.7.0
 	github.com/google/gopacket v1.1.19 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/satta/gommunityid v0.0.0-20190829061545-23c89d1f08fb

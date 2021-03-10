@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"strconv"
 
-	"github.com/d5/tengo"
-	"github.com/d5/tengo/stdlib"
+	tengo "github.com/d5/tengo/v2"
+	"github.com/d5/tengo/v2/stdlib"
 	"github.com/satta/speeve/flow"
 	log "github.com/sirupsen/logrus"
 	yaml "gopkg.in/yaml.v2"
