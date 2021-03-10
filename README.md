@@ -1,6 +1,7 @@
 # ⛲ speeve
 
-[![Status](https://github.com/satta/speeve/workflows/go/badge.svg)](https://github.com/satta/speeve/actions)
+[![Status](https://github.com/satta/speeve/actions/workflows/go.yml/badge.svg)](https://github.com/satta/speeve/actions)
+[![Go Reference](https://pkg.go.dev/badge/github.com/satta/speeve.svg)](https://pkg.go.dev/github.com/satta/speeve)
 
 speeve is a fast, probabilistic [EVE-JSON](https://suricata.readthedocs.io/en/latest/output/eve/eve-json-format.html) generator for testing and benchmarking of EVE-consuming applications. It can generate up to hundreds of thousands of events per second, with varying IPs, ports, timestamps, accurate [Community ID](https://github.com/corelight/community-id-spec) values, etc. under a predefined traffic profile model. Additional metadata can be added based on static strings, [Go templates](https://golang.org/pkg/text/template/) and [Tengo](https://github.com/d5/tengo) scripts. 
 
