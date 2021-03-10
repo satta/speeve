@@ -8,6 +8,7 @@ import (
 	"github.com/d5/tengo"
 	"github.com/d5/tengo/stdlib"
 	"github.com/satta/speeve/flow"
+	log "github.com/sirupsen/logrus"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -76,7 +77,11 @@ func (t *TengoProvider) GetByte(f *flow.Flow) []byte {
 	}
 	_ = tf
 	if err := t.compiled.Run(); err == nil {
-		buf.WriteString(t.compiled.Get("encoded").String())
+		strg := t.compiled.Get("encoded").String()
+		buf.WriteString(strg)
+	} else {
+		log.Error(err)
+		buf.WriteString("{}")
 	}
 	return buf.Bytes()
 }
