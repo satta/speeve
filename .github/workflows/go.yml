@@ -35,7 +35,13 @@ jobs:
         fi
 
     - name: Build
-      run: go build -v ./...
+      run: go build -v ./...; go build -v -o speeve cmd/speeve/main.go
 
     - name: Test
       run: go test -v ./...
+
+    - name: Provide binary as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: speeve-executable
+          path: speeve
