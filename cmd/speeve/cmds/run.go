@@ -34,6 +34,16 @@ func mainfunc(cmd *cobra.Command, args []string) {
 	}
 	log.SetOutput(os.Stderr)
 
+	seed := viper.GetInt64("seed")
+	if seed == 0 {
+		seedInt := time.Now().UTC().UnixNano()
+		log.Infof("seed %d", seedInt)
+		rand.Seed(seedInt)
+	} else {
+		log.Infof("seed %d", seed)
+		rand.Seed(seed)
+	}
+
 	// Start logging and profiling
 	pprofFile := viper.GetString("pproffile")
 	if len(pprofFile) > 0 {
@@ -130,6 +140,8 @@ func init() {
 	viper.BindPFlag("total", runCmd.PersistentFlags().Lookup("total"))
 	runCmd.PersistentFlags().StringP("pproffile", "", "", "filename to write pprof profiling info into")
 	viper.BindPFlag("proffile", runCmd.PersistentFlags().Lookup("proffile"))
+	runCmd.PersistentFlags().Int64P("seed", "", 0, "random seed for sampling")
+	viper.BindPFlag("seed", runCmd.PersistentFlags().Lookup("seed"))
 
 	runCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose mode")
 	viper.BindPFlag("verbose", runCmd.PersistentFlags().Lookup("verbose"))
