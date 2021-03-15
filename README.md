@@ -37,12 +37,12 @@ Flags:
   -s, --persec uint32       number of events/s to emit (default 1000)
       --pproffile string    filename to write pprof profiling info into
   -p, --profile string      filename of traffic profile definition file (default "profile.yaml")
+      --seed int            random seed for sampling
   -n, --total uint          total number of events to emit
   -v, --verbose             verbose mode
 
 Global Flags:
       --config string   config file (default is $HOME/.speeve.yaml)
-
 ```
 
 The only required parameter is the name of a profile YAML file to use (see
@@ -53,6 +53,7 @@ as well as rate (`-s`, events per second).
 Example:
 ```
 $ speeve spew -p profile.yaml | head -n 2
+INFO[0000] seed 1615822102344012700
 WARN[0000] random_dns: src ports undefined, will use random high ports 
 WARN[0000] random_dns: src ports undefined, will use random high ports 
 WARN[0000] dns: src ports undefined, will use random high ports 
