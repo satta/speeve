@@ -9,11 +9,7 @@ speeve is a fast, probabilistic [EVE-JSON](https://suricata.readthedocs.io/en/la
 
 ## Building
 
-Build dependency introduced via `gommunityid` dependency:
-
-* libpcap (e.g. install via `apt install libpcap-dev` on Debian-like systems)
-
-Otherwise just build like other Go tools:
+Build like other Go tools:
 
 ```
 $ go get -v -t github.com/satta/speeve/...
