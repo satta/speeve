@@ -11,6 +11,9 @@ providers:
       proto: 6
       static: '{"action": "allowed", "gid": 1, "signature_id": 2001999, "rev": 9, "signature": "ET MALWARE BTGrab.com Spyware Downloading Ads", "category": "A Network Trojan was detected", "severity": 1}'
       weight: 100
+      top_level_fields:
+        foo: bar
+        baz: quux
     - name: random_dns
       type: tengo
       event_type: dns

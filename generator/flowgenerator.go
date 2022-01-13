@@ -29,21 +29,23 @@ type ProviderConfig struct {
 			Src string
 			Dst string
 		}
-		Proto       uint8
-		ProtoString string
-		Weight      uint
+		Proto          uint8
+		ProtoString    string
+		Weight         uint
+		TopLevelFields map[string]string `yaml:"top_level_fields"`
 	}
 }
 
 type ConfiguredProvider struct {
-	SrcIPs    *util.IPSampler
-	DstIPs    *util.IPSampler
-	SrcPorts  []uint16
-	DstPorts  []uint16
-	Proto     uint8
-	Sampler   *util.Sampler
-	Provider  providers.EVEProvider
-	EventType string
+	SrcIPs        *util.IPSampler
+	DstIPs        *util.IPSampler
+	SrcPorts      []uint16
+	DstPorts      []uint16
+	Proto         uint8
+	Sampler       *util.Sampler
+	Provider      providers.EVEProvider
+	EventType     string
+	ExtraTopLevel string
 }
 
 type FlowGenerator struct {
@@ -103,14 +105,22 @@ func MakeFlowGenerator(configFile string) (*FlowGenerator, error) {
 		if len(pc.EventType) == 0 {
 			return nil, fmt.Errorf("%s: event type be cannot be undefined or empty", pc.Name)
 		}
+		// preprocess extra top level fields
+		topLevelOut := ""
+		if len(pc.TopLevelFields) > 0 {
+			for k, v := range pc.TopLevelFields {
+				topLevelOut += fmt.Sprintf(`, "%s": "%s"`, k, v)
+			}
+		}
 		cfgp := ConfiguredProvider{
-			Provider:  p,
-			SrcIPs:    ss,
-			DstIPs:    ds,
-			SrcPorts:  pc.Ports.Src,
-			DstPorts:  pc.Ports.Dst,
-			Proto:     pc.Proto,
-			EventType: pc.EventType,
+			Provider:      p,
+			SrcIPs:        ss,
+			DstIPs:        ds,
+			SrcPorts:      pc.Ports.Src,
+			DstPorts:      pc.Ports.Dst,
+			Proto:         pc.Proto,
+			EventType:     pc.EventType,
+			ExtraTopLevel: topLevelOut,
 		}
 		fg.Providers = append(fg.Providers, cfgp)
 		fg.Sampler.Add(uint(idx), pc.Weight)
@@ -187,6 +197,7 @@ func (fg *FlowGenerator) EmitFlow(out chan<- []byte) {
 		reason,
 		alerted)
 	fg.Buffer.WriteString(flowStart)
+	fg.Buffer.WriteString(selectedProvider.ExtraTopLevel)
 	fg.Buffer.WriteString(fmt.Sprintf(`, "flow": %s}`, flowJSON))
 	fg.Buffer.WriteByte('\n')
 	// We intentionally use Buffer.String() here to ensure we pass a copy
@@ -206,6 +217,7 @@ func (fg *FlowGenerator) EmitFlow(out chan<- []byte) {
 		flow.CommunityID)
 	providerJSON := string(selectedProvider.Provider.GetByte(flow))
 	fg.Buffer.WriteString(genericStart)
+	fg.Buffer.WriteString(selectedProvider.ExtraTopLevel)
 	fg.Buffer.WriteString(fmt.Sprintf(`, "%s": %s}`, selectedProvider.EventType, providerJSON))
 	fg.Buffer.WriteByte('\n')
 	// We intentionally use Buffer.String() here to ensure we pass a copy
