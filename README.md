@@ -17,6 +17,15 @@ $ go get -v -t github.com/satta/speeve/...
 $ speeve spew -h
 ```
 
+or in newer fashion:
+
+```
+$ go install github.com/satta/speeve/...@latest
+...
+$ speeve spew -h
+```
+
+
 ## Usage
 
 ```
